@@ -12,24 +12,17 @@ class BaseMap extends Component {
     };
   }
 
-  handleClick = () => {
-    this.refs.map.leafletElement.locate();
-  };
-
-  handleLocationFound = e => {
-    this.setState({
-      hasLocation: true,
-      latlng: e.latlng,
-    });
+  handleClick = (e) => {
+    this.setState({ latlng: e.latlng })
   };
 
 // http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:08&LAN=701
   render() {
     const position = [this.state.lat, this.state.lng];
-    const marker = this.state.hasLocation
+    const marker = this.state.latlng
       ? <Marker position={this.state.latlng}>
           <Popup>
-            <span>You are here</span>
+            <span>You clicked here</span>
           </Popup>
         </Marker>
       : null;
