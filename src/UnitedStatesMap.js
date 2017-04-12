@@ -6,10 +6,13 @@ class BaseMap extends Component {
   constructor(props){
     super(props)
     this.state =  {
-
+      lat: 39.742043,
+      lng: -104.991531,
+      zoom: 13,
     };
   }
   render() {
+    const position = [this.state.lat, this.state.lng];
     return (
       <div className="map-container">
         <Map
@@ -24,6 +27,11 @@ class BaseMap extends Component {
             maxZoom = {10}
             minZoom = {2}
           />
+          <Marker position={position}>
+            <Popup>
+              <span>Telugu People in Denver <br/> Population: Sekhar</span>
+            </Popup>
+          </Marker>
         </Map>
       </div>
     );
