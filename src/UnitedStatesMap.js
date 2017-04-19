@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Map, TileLayer } from 'react-leaflet';
+import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { statesData } from './us-states.js';
-import L from 'leaflet'
+// import L from 'leaflet'
 
 class BaseMap extends Component {
   constructor(props){
@@ -10,17 +10,24 @@ class BaseMap extends Component {
       lat: 39.742043,
       lng: -104.991531,
       zoom: 1,
-      geojson: null
+      // geojson: null,
+      // geojsonLayer: null,
+      // map: null
     };
+    // this.filterGeoJSONLayer = this.filterGeoJSONLayer.bind(this);
   }
 
-  componentDidMount() {
-    // this.setState({
-    //   geojson: statesGeojson
-    // });
-    console.log(statesData)
-    // L.geoJson(statesGeojson).addTo(this.refs.map);
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     geojson: statesData
+  //   });
+  //   console.log(statesData)
+  //   console.log(this.refs.map)
+  // }
+
+  // componentWillMount() {
+  //   L.geoJSON(statesData).addTo(this.refs.map);
+  // }
 
 // http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:08&LAN=701
 // var mapboxAccessToken = pk.eyJ1Ijoic2VraGFycCIsImEiOiJjajFtenRxOHMwMGU0MnFuMTQ5ZGpxZnUwIn0.grcMpc9MF2c9hd4WigV_0g;
@@ -47,6 +54,9 @@ class BaseMap extends Component {
             attribution='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
             maxZoom={10}
             minZoom={2}
+          />
+          <GeoJSON
+            data={statesData}
           />
         </Map>
       </div>
