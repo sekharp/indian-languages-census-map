@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
-import geojson from './us-states.geojson';
-// import L from 'leaflet'
+import { Map, TileLayer } from 'react-leaflet';
+import { statesData } from './us-states.js';
+import L from 'leaflet'
 
 class BaseMap extends Component {
   constructor(props){
@@ -9,20 +9,18 @@ class BaseMap extends Component {
     this.state = {
       lat: 39.742043,
       lng: -104.991531,
-      zoom: 2,
+      zoom: 1,
       geojson: null
     };
   }
 
   componentDidMount() {
-    this.setState({
-      geojson
-    });
+    // this.setState({
+    //   geojson: statesGeojson
+    // });
+    console.log(statesData)
+    // L.geoJson(statesGeojson).addTo(this.refs.map);
   }
-
-  handleClick = (e) => {
-    this.setState({ latlng: e.latlng })
-  };
 
 // http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:08&LAN=701
 // var mapboxAccessToken = pk.eyJ1Ijoic2VraGFycCIsImEiOiJjajFtenRxOHMwMGU0MnFuMTQ5ZGpxZnUwIn0.grcMpc9MF2c9hd4WigV_0g;
@@ -33,16 +31,7 @@ class BaseMap extends Component {
 //     attribution: ...
 // }).addTo(map);
 
-// L.geoJson(statesData).addTo(map);
   render() {
-    const position = [this.state.lat, this.state.lng];
-    const marker = this.state.latlng
-      ? <Marker position={this.state.latlng}>
-          <Popup>
-            <span>You clicked here</span>
-          </Popup>
-        </Marker>
-      : null;
     return (
       <div className="map-container">
         <Map
@@ -50,8 +39,6 @@ class BaseMap extends Component {
           center={(this.state.latlng || [39.750809, -104.996810])}
           zoom={6}
           length={4}
-          onClick={this.handleClick}
-          onLocationfound={this.handleLocationFound}
           ref="map"
           maxBounds={[[85, 100],[-85, -280]]}
         >
@@ -61,12 +48,6 @@ class BaseMap extends Component {
             maxZoom={10}
             minZoom={2}
           />
-          <Marker position={position}>
-            <Popup>
-              <span>Telugu People in Denver <br/> Population: Sekhar</span>
-            </Popup>
-          </Marker>
-          {marker}
         </Map>
       </div>
     );
