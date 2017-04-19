@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { statesData } from './us-states.js';
-// import L from 'leaflet'
+import { map } from 'lodash';
 
 class BaseMap extends Component {
   constructor(props){
@@ -10,35 +10,34 @@ class BaseMap extends Component {
       lat: 39.742043,
       lng: -104.991531,
       zoom: 1,
-      // geojson: null,
-      // geojsonLayer: null,
-      // map: null
     };
-    // this.filterGeoJSONLayer = this.filterGeoJSONLayer.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.setState({
-  //     geojson: statesData
-  //   });
-  //   console.log(statesData)
-  //   console.log(this.refs.map)
-  // }
+  style(feature) {
+    var getColor = (d) => {
+      return d > 1000 ? '#800026' :
+            d > 500  ? '#BD0026' :
+            d > 200  ? '#E31A1C' :
+            d > 100  ? '#FC4E2A' :
+            d > 50   ? '#FD8D3C' :
+            d > 20   ? '#FEB24C' :
+            d > 10   ? '#FED976' :
+                        '#FFEDA0';
+    }
 
-  // componentWillMount() {
-  //   L.geoJSON(statesData).addTo(this.refs.map);
-  // }
-
-// http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:08&LAN=701
-// var mapboxAccessToken = pk.eyJ1Ijoic2VraGFycCIsImEiOiJjajFtenRxOHMwMGU0MnFuMTQ5ZGpxZnUwIn0.grcMpc9MF2c9hd4WigV_0g;
-// var map = L.map('map').setView([37.8, -96], 4);
-
-// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
-//     id: 'mapbox.light',
-//     attribution: ...
-// }).addTo(map);
+    return {
+        fillColor: getColor(feature.properties.density),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+  }
 
   render() {
+    // var geojsonStyle = map(statesData.features, (feature) => this.style(feature));
+    // console.log(geojsonStyle)
     return (
       <div className="map-container">
         <Map
@@ -57,6 +56,7 @@ class BaseMap extends Component {
           />
           <GeoJSON
             data={statesData}
+            style={this.style}
           />
         </Map>
       </div>
