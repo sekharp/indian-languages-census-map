@@ -26,7 +26,7 @@ class BaseMap extends Component {
     }
 
     return {
-        fillColor: getColor(feature.properties.density),
+        fillColor: getColor(feature.properties.population),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -36,8 +36,21 @@ class BaseMap extends Component {
   }
 
   render() {
-    // var geojsonStyle = map(statesData.features, (feature) => this.style(feature));
-    // console.log(geojsonStyle)
+    var languageData = map(statesData.features, (feature) => {
+      let languagePopulation = 0;
+      fetch(`http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=701&key=${process.env.REACT_APP_SECRET}`)
+        .then((res) => {
+          return res.json()
+        })
+        .then((res)=>{
+          languagePopulation = res[1][0]
+          feature.properties.population = languagePopulation
+        })
+        return feature
+      // console.log(feature.properties.name, feature.properties.population)
+    })
+    console.log(languageData)
+
     return (
       <div className="map-container">
         <Map
@@ -55,7 +68,7 @@ class BaseMap extends Component {
             minZoom={2}
           />
           <GeoJSON
-            data={statesData}
+            data={languageData}
             style={this.style}
           />
         </Map>
