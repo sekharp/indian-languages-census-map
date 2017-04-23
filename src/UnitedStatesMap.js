@@ -34,39 +34,14 @@ class BaseMap extends Component {
     };
   }
 
-  highlightFeature(e) {
-    // console.log(this)
-    // this.refs.geojson.leafletElement.resetStyle(e.target);
-    // var layer = e.target;
-
-    // layer.setStyle({
-    //   weight: 5,
-    //   color: '#666',
-    //   dashArray: '',
-    //   fillOpacity: 0.7
-    // });
-
-    // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-    //   layer.bringToFront();
-    // }
-  }
-
-  // resetHighlight(e) {
-  //   geojson.resetStyle(e.target);
-  // }
-
-  // zoomToFeature(e) {
-  //   map.fitBounds(e.target.getBounds());
-  // }
-
   onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.name) {
-        layer.bindPopup(feature.properties.name);
+      var popup = feature.properties.name + '<br/>Indian Language Speakers<br/>Telugu: ' + feature.properties.population
+      layer.bindPopup(popup);
     }
   }
 
   render() {
-    console.log(this.props.languageData)
     return (
       <div className="map-container">
         <Map
