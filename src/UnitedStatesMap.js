@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
-import { statesData } from './us-states.js';
-import { map } from 'lodash';
 
 class BaseMap extends Component {
   constructor(props){
@@ -15,8 +13,8 @@ class BaseMap extends Component {
 
   style(feature) {
     var getColor = (d) => {
-      return d > 1000 ? '#800026' :
-            d > 500  ? '#BD0026' :
+      return d > 39000 ? '#800026' :
+            d > 2000  ? '#BD0026' :
             d > 200  ? '#E31A1C' :
             d > 100  ? '#FC4E2A' :
             d > 50   ? '#FD8D3C' :
@@ -26,37 +24,23 @@ class BaseMap extends Component {
     }
 
     return {
-        fillColor: getColor(feature.properties.population),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
+      fillColor: getColor(feature.properties.population),
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.7
     };
   }
 
   render() {
-    var languageData = map(statesData.features, (feature) => {
-      let languagePopulation = 0;
-      fetch(`http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=701&key=${process.env.REACT_APP_SECRET}`)
-        .then((res) => {
-          return res.json()
-        })
-        .then((res)=>{
-          languagePopulation = res[1][0]
-          feature.properties.population = languagePopulation
-        })
-        return feature
-      // console.log(feature.properties.name, feature.properties.population)
-    })
-    console.log(languageData)
-
+    console.log(this.props.languageData)
     return (
       <div className="map-container">
         <Map
           className="map"
           center={(this.state.latlng || [39.750809, -104.996810])}
-          zoom={6}
+          zoom={4}
           length={4}
           ref="map"
           maxBounds={[[85, 100],[-85, -280]]}
@@ -68,7 +52,7 @@ class BaseMap extends Component {
             minZoom={2}
           />
           <GeoJSON
-            data={languageData}
+            data={this.props.languageData}
             style={this.style}
           />
         </Map>
