@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
+import { L } from 'leaflet';
 
 class BaseMap extends Component {
   constructor(props){
@@ -14,12 +15,12 @@ class BaseMap extends Component {
   style(feature) {
     var getColor = (d) => {
       return d > 39000 ? '#800026' :
-            d > 2000  ? '#BD0026' :
-            d > 200  ? '#E31A1C' :
-            d > 100  ? '#FC4E2A' :
-            d > 50   ? '#FD8D3C' :
-            d > 20   ? '#FEB24C' :
-            d > 10   ? '#FED976' :
+             d > 20000  ? '#BD0026' :
+             d > 10000  ? '#E31A1C' :
+             d > 5000  ? '#FC4E2A' :
+             d > 1000   ? '#FD8D3C' :
+             d > 500   ? '#FEB24C' :
+             d > 100   ? '#FED976' :
                         '#FFEDA0';
     }
 
@@ -31,6 +32,37 @@ class BaseMap extends Component {
       dashArray: '3',
       fillOpacity: 0.7
     };
+  }
+
+  highlightFeature(e) {
+    // console.log(this)
+    // this.refs.geojson.leafletElement.resetStyle(e.target);
+    // var layer = e.target;
+
+    // layer.setStyle({
+    //   weight: 5,
+    //   color: '#666',
+    //   dashArray: '',
+    //   fillOpacity: 0.7
+    // });
+
+    // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    //   layer.bringToFront();
+    // }
+  }
+
+  // resetHighlight(e) {
+  //   geojson.resetStyle(e.target);
+  // }
+
+  // zoomToFeature(e) {
+  //   map.fitBounds(e.target.getBounds());
+  // }
+
+  onEachFeature(feature, layer) {
+    if (feature.properties && feature.properties.name) {
+        layer.bindPopup(feature.properties.name);
+    }
   }
 
   render() {
@@ -54,6 +86,7 @@ class BaseMap extends Component {
           <GeoJSON
             data={this.props.languageData}
             style={this.style}
+            onEachFeature={this.onEachFeature}
           />
         </Map>
       </div>
