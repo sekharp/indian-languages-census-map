@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
-// import L from 'leaflet'
+import { Map, TileLayer, GeoJSON } from 'react-leaflet';
+import { L } from 'leaflet';
 
 class BaseMap extends Component {
   constructor(props){
@@ -8,33 +8,47 @@ class BaseMap extends Component {
     this.state = {
       lat: 39.742043,
       lng: -104.991531,
-      zoom: 13,
+      zoom: 1,
     };
   }
 
-  handleClick = (e) => {
-    this.setState({ latlng: e.latlng })
-  };
+  style(feature) {
+    var getColor = (d) => {
+      return d > 39000 ? '#800026' :
+             d > 20000  ? '#BD0026' :
+             d > 10000  ? '#E31A1C' :
+             d > 5000  ? '#FC4E2A' :
+             d > 1000   ? '#FD8D3C' :
+             d > 500   ? '#FEB24C' :
+             d > 100   ? '#FED976' :
+                        '#FFEDA0';
+    }
 
-// http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:08&LAN=701
+    return {
+      fillColor: getColor(feature.properties.population),
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.7
+    };
+  }
+
+  onEachFeature(feature, layer) {
+    if (feature.properties && feature.properties.name) {
+      var popup = feature.properties.name + '<br/>Indian Language Speakers<br/>Telugu: ' + feature.properties.population
+      layer.bindPopup(popup);
+    }
+  }
+
   render() {
-    const position = [this.state.lat, this.state.lng];
-    const marker = this.state.latlng
-      ? <Marker position={this.state.latlng}>
-          <Popup>
-            <span>You clicked here</span>
-          </Popup>
-        </Marker>
-      : null;
     return (
       <div className="map-container">
         <Map
           className="map"
           center={(this.state.latlng || [39.750809, -104.996810])}
-          zoom={20}
+          zoom={4}
           length={4}
-          onClick={this.handleClick}
-          onLocationfound={this.handleLocationFound}
           ref="map"
           maxBounds={[[85, 100],[-85, -280]]}
         >
@@ -44,12 +58,11 @@ class BaseMap extends Component {
             maxZoom={10}
             minZoom={2}
           />
-          <Marker position={position}>
-            <Popup>
-              <span>Telugu People in Denver <br/> Population: Sekhar</span>
-            </Popup>
-          </Marker>
-          {marker}
+          <GeoJSON
+            data={this.props.languageData}
+            style={this.style}
+            onEachFeature={this.onEachFeature}
+          />
         </Map>
       </div>
     );
