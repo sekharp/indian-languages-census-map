@@ -15,7 +15,7 @@ class App extends Component {
   componentDidMount() {
     let urls = [];
     map(statesData.features, (feature) => {
-      var url = `http://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=701&key=${process.env.REACT_APP_SECRET}`;
+      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=701&key=${process.env.REACT_APP_SECRET}`;
       urls.push(url)
       return feature
     })
