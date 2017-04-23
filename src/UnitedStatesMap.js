@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
-import { L } from 'leaflet';
 
 class BaseMap extends Component {
   constructor(props){

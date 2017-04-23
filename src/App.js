@@ -24,7 +24,7 @@ class App extends Component {
     Promise.all(promises).then(results => {
       languageData = map(results, (result) => result[1]);
       var finalData = map(statesData.features, (feature) => {
-        var index = findIndex(languageData, (s) => { return s[4] == feature.id; });
+        var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
         feature.properties.population = languageData[index][0];
         return feature
       })
