@@ -35,7 +35,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Indian Languages US Census Map</h1>
+        <h1>Indian Languages US Census Map - Telugu</h1>
         <h3><i>Data From 2009-13, US Census American Community Survey</i></h3>
         <UnitedStatesMap languageData={this.state.languageData}/>
       </div>
