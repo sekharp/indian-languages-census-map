@@ -35,8 +35,17 @@ class BaseMap extends Component {
 
   onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.name) {
-      var popup = feature.properties.name + '<br/>Indian Language Speakers<br/>Hindi: ' + feature.properties.population
+      var pop = feature.properties.population
+      var popup = '<b>' + feature.properties.name + '</b>' +
+                  '<br/>Indian Language Speakers<br/>Panjabi: ' +
+                  (pop == null ? 'N/A' : pop);
       layer.bindPopup(popup);
+      layer.on('mouseover', function (e) {
+          this.openPopup();
+      });
+      layer.on('mouseout', function (e) {
+          this.closePopup();
+      });
     }
   }
 
@@ -44,6 +53,7 @@ class BaseMap extends Component {
     console.log(this.props.languageData)
     return (
       <div className="map-container">
+        <div class='info'><h4>Sekhar</h4></div>
         <Map
           className="map"
           center={(this.state.latlng || [39.750809, -104.996810])}
