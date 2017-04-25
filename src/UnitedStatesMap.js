@@ -35,12 +35,13 @@ class BaseMap extends Component {
 
   onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.name) {
-      var popup = feature.properties.name + '<br/>Indian Language Speakers<br/>Telugu: ' + feature.properties.population
+      var popup = feature.properties.name + '<br/>Indian Language Speakers<br/>Hindi: ' + feature.properties.population
       layer.bindPopup(popup);
     }
   }
 
   render() {
+    console.log(this.props.languageData)
     return (
       <div className="map-container">
         <Map

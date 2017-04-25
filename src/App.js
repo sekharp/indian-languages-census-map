@@ -14,8 +14,13 @@ class App extends Component {
 
   componentDidMount() {
     let urls = [];
+    let selectedLanguage = 665
+    // languages that work, panjabi, bengali, tamil, telugu
+    // languages that don't, kannada, hindi, gujurati
+    var languageCodeMap = { 'telugu': 701, 'tamil': 702 }
+    var languageCode = selectedLanguage ? selectedLanguage : 701
     map(statesData.features, (feature) => {
-      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=701&key=${process.env.REACT_APP_SECRET}`;
+      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       urls.push(url)
       return feature
     })
@@ -35,7 +40,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Indian Languages US Census Map - Telugu</h1>
+        <h1>Indian Languages US Census Map</h1>
         <h3><i>Data From 2009-13, US Census American Community Survey</i></h3>
         <UnitedStatesMap languageData={this.state.languageData}/>
       </div>

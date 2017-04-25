@@ -2,9 +2,14 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-color: lightgray;
 }
 
 .map {
   height: 80vh;
   margin: 50px;
+  border-width: 20px;
+  border: black;
+  border-color: black;
+  border-style: solid;
 }
