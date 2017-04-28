@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { statesData } from './us-states.js';
+import { map, findIndex } from 'lodash';
 
 class BaseMap extends Component {
   constructor(props){
@@ -9,7 +11,32 @@ class BaseMap extends Component {
       lat: 39.742043,
       lng: -104.991531,
       zoom: 1,
+      languageData: {}
     };
+  }
+
+  componentDidMount() {
+    let urls = [];
+    let selectedLanguage = 665
+    // languages that don't work: kannada, hindi, gujurati
+    var languageCodeMap = { 'bengali': 664, 'gujurati': 667, 'telugu': 701, 'tamil': 704 }
+    var languageCode = selectedLanguage ? selectedLanguage : 701
+    map(statesData.features, (feature) => {
+      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
+      urls.push(url)
+      return feature
+    })
+    let languageData = [];
+    var promises = urls.map(url => fetch(url).then(r => r.json()));
+    Promise.all(promises).then(results => {
+      languageData = map(results, (result) => result[1]);
+      var finalData = map(statesData.features, (feature) => {
+        var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
+        feature.properties.population = languageData[index][0];
+        return feature
+      })
+      this.setState({ languageData: { type: 'FeatureCollection', features: finalData } })
+    });
   }
 
   style(feature) {
@@ -51,15 +78,14 @@ class BaseMap extends Component {
   }
 
   render() {
-    console.log(this.props.languageData)
+    console.log(this.state.languageData)
     return (
       <div className="map-container">
         <DropdownButton bsStyle='Primary' title='Pick a Language'>
-          <MenuItem eventKey="1">Action</MenuItem>
-          <MenuItem eventKey="2">Another action</MenuItem>
-          <MenuItem eventKey="3" active>Active Item</MenuItem>
-          <MenuItem divider />
-          <MenuItem eventKey="4">Separated link</MenuItem>
+          <MenuItem eventKey="1">Telugu</MenuItem>
+          <MenuItem eventKey="2">Tamil</MenuItem>
+          <MenuItem eventKey="3">Gujurati</MenuItem>
+          <MenuItem eventKey="4">Bengali</MenuItem>
         </DropdownButton>
         <Map
           className="map"
@@ -76,7 +102,7 @@ class BaseMap extends Component {
             minZoom={2}
           />
           <GeoJSON
-            data={this.props.languageData}
+            data={this.state.languageData}
             style={this.style}
             onEachFeature={this.onEachFeature}
           />
