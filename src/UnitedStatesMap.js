@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { statesData } from './us-states.js';
-import { map, findIndex } from 'lodash';
+import { map, findIndex, capitalize} from 'lodash';
 
 class BaseMap extends Component {
   constructor(props){
@@ -11,21 +11,23 @@ class BaseMap extends Component {
       lat: 39.742043,
       lng: -104.991531,
       zoom: 1,
+      selectedLanguage: 'telugu',
       languageData: {}
     };
   }
 
   componentDidMount() {
     let urls = [];
-    let selectedLanguage = 665
     // languages that don't work: kannada, hindi, gujurati
     var languageCodeMap = { 'bengali': 664, 'gujurati': 667, 'telugu': 701, 'tamil': 704 }
-    var languageCode = selectedLanguage ? selectedLanguage : 701
+    var languageCode = languageCodeMap[this.state.selectedLanguage];
+
     map(statesData.features, (feature) => {
       var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       urls.push(url)
       return feature
     })
+
     let languageData = [];
     var promises = urls.map(url => fetch(url).then(r => r.json()));
     Promise.all(promises).then(results => {
@@ -33,6 +35,7 @@ class BaseMap extends Component {
       var finalData = map(statesData.features, (feature) => {
         var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
         feature.properties.population = languageData[index][0];
+        feature.properties.language   = this.state.selectedLanguage;
         return feature
       })
       this.setState({ languageData: { type: 'FeatureCollection', features: finalData } })
@@ -42,13 +45,13 @@ class BaseMap extends Component {
   style(feature) {
     var getColor = (d) => {
       return d > 39000 ? '#800026' :
-             d > 20000  ? '#BD0026' :
-             d > 10000  ? '#E31A1C' :
+             d > 20000 ? '#BD0026' :
+             d > 10000 ? '#E31A1C' :
              d > 5000  ? '#FC4E2A' :
-             d > 1000   ? '#FD8D3C' :
+             d > 1000  ? '#FD8D3C' :
              d > 500   ? '#FEB24C' :
              d > 100   ? '#FED976' :
-                        '#FFEDA0';
+                         '#FFEDA0';
     }
 
     return {
@@ -65,7 +68,8 @@ class BaseMap extends Component {
     if (feature.properties && feature.properties.name) {
       var pop = feature.properties.population
       var popup = '<b>' + feature.properties.name + '</b>' +
-                  '<br/>Indian Language Speakers<br/>Panjabi: ' +
+                  '<br/>Indian Language Speakers<br/>' +
+                  capitalize(feature.properties.language) + ': ' +
                   (pop == null ? 'N/A' : pop);
       layer.bindPopup(popup);
       layer.on('mouseover', function (e) {
@@ -77,15 +81,19 @@ class BaseMap extends Component {
     }
   }
 
+  chooseLanguage = (event) => {
+    this.setState({ selectedLanguage: event })
+  }
+
   render() {
-    console.log(this.state.languageData)
+    console.log(this.state.selectedLanguage)
     return (
       <div className="map-container">
-        <DropdownButton bsStyle='Primary' title='Pick a Language'>
-          <MenuItem eventKey="1">Telugu</MenuItem>
-          <MenuItem eventKey="2">Tamil</MenuItem>
-          <MenuItem eventKey="3">Gujurati</MenuItem>
-          <MenuItem eventKey="4">Bengali</MenuItem>
+        <DropdownButton bsStyle='Primary' title='Pick a Language' onSelect={this.chooseLanguage}>
+          <MenuItem eventKey="telugu">Telugu</MenuItem>
+          <MenuItem eventKey="tamil">Tamil</MenuItem>
+          <MenuItem eventKey="gujurati">Gujurati</MenuItem>
+          <MenuItem eventKey="bengali">Bengali</MenuItem>
         </DropdownButton>
         <Map
           className="map"
