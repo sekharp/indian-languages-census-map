@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { statesData } from './us-states.js';
-import { map, findIndex, capitalize} from 'lodash';
+import { map, findIndex, capitalize } from 'lodash';
 
 class BaseMap extends Component {
   constructor(props){
@@ -11,17 +10,15 @@ class BaseMap extends Component {
       lat: 39.742043,
       lng: -104.991531,
       zoom: 1,
-      selectedLanguage: 'telugu',
       languageData: {}
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let urls = [];
     // languages that don't work: kannada, hindi, gujurati
     var languageCodeMap = { 'bengali': 664, 'gujurati': 667, 'telugu': 701, 'tamil': 704 }
-    var languageCode = languageCodeMap[this.state.selectedLanguage];
-
+    var languageCode = languageCodeMap[this.props.selectedLanguage];
     map(statesData.features, (feature) => {
       var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       urls.push(url)
@@ -35,7 +32,7 @@ class BaseMap extends Component {
       var finalData = map(statesData.features, (feature) => {
         var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
         feature.properties.population = languageData[index][0];
-        feature.properties.language   = this.state.selectedLanguage;
+        feature.properties.language   = this.props.selectedLanguage;
         return feature
       })
       this.setState({ languageData: { type: 'FeatureCollection', features: finalData } })
@@ -81,20 +78,12 @@ class BaseMap extends Component {
     }
   }
 
-  chooseLanguage = (event) => {
-    this.setState({ selectedLanguage: event })
-  }
+
 
   render() {
-    console.log(this.state.selectedLanguage)
+    console.log(this.props.selectedLanguage)
     return (
       <div className="map-container">
-        <DropdownButton bsStyle='Primary' title='Pick a Language' onSelect={this.chooseLanguage}>
-          <MenuItem eventKey="telugu">Telugu</MenuItem>
-          <MenuItem eventKey="tamil">Tamil</MenuItem>
-          <MenuItem eventKey="gujurati">Gujurati</MenuItem>
-          <MenuItem eventKey="bengali">Bengali</MenuItem>
-        </DropdownButton>
         <Map
           className="map"
           center={(this.state.latlng || [39.750809, -104.996810])}
@@ -110,6 +99,7 @@ class BaseMap extends Component {
             minZoom={2}
           />
           <GeoJSON
+            key={this.props.selectedLanguage}
             data={this.state.languageData}
             style={this.style}
             onEachFeature={this.onEachFeature}
