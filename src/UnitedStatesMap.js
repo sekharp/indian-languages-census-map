@@ -64,16 +64,28 @@ class BaseMap extends Component {
   onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.name) {
       var pop = feature.properties.population
-      var popup = '<b>' + feature.properties.name + '</b>' +
-                  '<br/>Indian Language Speakers<br/>' +
+      var popup = '<b><h4>' + feature.properties.name + '</b><br/>' +
                   capitalize(feature.properties.language) + ': ' +
-                  (pop == null ? 'N/A' : pop);
+                  (pop == null ? 'N/A' : pop) + '</h4>';
       layer.bindPopup(popup);
       layer.on('mouseover', function (e) {
           this.openPopup();
+          layer.setStyle({
+            weight: 5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
+          });
+          layer.bringToFront();
       });
       layer.on('mouseout', function (e) {
           this.closePopup();
+          layer.setStyle({
+            weight: 2,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+          });
       });
     }
   }
