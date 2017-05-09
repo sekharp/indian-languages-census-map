@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedLanguage: 'telugu'
+      selectedLanguage: 'bengali'
     };
   }
 
@@ -24,7 +24,6 @@ class App extends Component {
         <DropdownButton bsStyle='primary' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
           <MenuItem eventKey='telugu'>Telugu</MenuItem>
           <MenuItem eventKey='tamil'>Tamil</MenuItem>
-          <MenuItem eventKey='gujurati'>Gujurati</MenuItem>
           <MenuItem eventKey='bengali'>Bengali</MenuItem>
         </DropdownButton>
         <UnitedStatesMap selectedLanguage={this.state.selectedLanguage} />
