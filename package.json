@@ -9,8 +9,9 @@
     "dotenv": "^4.0.0",
     "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "react": "^15.5.4",
+    "react-bootstrap": "^0.30.10",
+    "react-dom": "^15.5.4",
     "react-leaflet": "^1.1.6"
   },
   "scripts": {
