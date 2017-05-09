@@ -7,9 +7,9 @@ const popupForFeature = (feature) => {
   var population = feature.properties.population;
   var state = feature.properties.name;
   var language = feature.properties.language;
-  var popup = '<b><h4>' + state + '</b><br/>' +
+  var popup = '<b>' + state + '</b><br/>' +
               capitalize(language) + ': ' +
-              (population == null ? 'N/A' : population) + '</h4>';
+              (population == null ? 'N/A' : population);
   return popup
 }
 
