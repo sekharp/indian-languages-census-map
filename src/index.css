@@ -1,17 +1,22 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background-color: lightgray;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: lightgray;
 }
 
 .map {
-  height: 80vh;
-  margin: 50px;
-  border-width: 5px;
-  border: black;
-  border-color: black;
-  border-style: solid;
+    height: 80vh;
+    margin: 50px;
+    border-width: 5px;
+    border: black;
+    border-color: black;
+    border-style: solid;
+}
+
+.mapbox {
+    width: 90%;
+    text-align: center;
 }
 
 .info {
@@ -20,17 +25,9 @@ body {
     background: white;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-    width: 950px;
-}
-
-.info h4 {
-    margin: 0 0 5px;
-    color: #777;
-}
-
-.mapbox {
-    text-align: center;
+    border-radius: 10px;
+    width: 920px;
+    display: inline-block;
 }
 
 .legend {
