@@ -1,29 +1,49 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background-color: lightgray;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: lightgray;
+}
+
+.mapbox {
+    width: 100%;
 }
 
 .map {
-  height: 80vh;
-  margin: 50px;
-  border-width: 20px;
-  border: black;
-  border-color: black;
-  border-style: solid;
+    width: 80%;
+    float: left;
+    position: relative;
+    height: 60vh;
+    margin-left: 40px;
+    border-width: 5px;
+    border: black;
+    border-color: black;
+    border-style: solid;
 }
 
 .info {
-    padding: 6px 8px;
+    width: 20%;
+    float: right;
+    padding: 8px;
+    margin-right: 40px;
     font: 14px/16px Arial, Helvetica, sans-serif;
     background: white;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
-.info h4 {
-    margin: 0 0 5px;
-    color: #777;
+.legend {
+    line-height: 18px;
+    color: #555;
+    text-align: left;
+    width: 200px;
+}
+
+.legend i {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    padding-top: 0px;
+    opacity: 0.7;
 }
