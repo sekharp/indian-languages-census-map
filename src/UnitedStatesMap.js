@@ -16,18 +16,19 @@ class BaseMap extends Component {
 
   fetchCensusData(selectedLanguage) {
     let urls = [];
-    var languageCodeMap = { 
+    var languageCodeMap = {
       'hindi': 17, 'bengali': 664, 'panjabi': 665, 'marathi': 666,
       'gujarathi': 18, 'bihari': 668, 'rajasthani': 669, 'oriya': 670,
       'urdu': 19, 'assamese': 672, 'kashmiri': 673, 'sindhi': 675,
       'telugu': 701, 'kannada': 702, 'malayalam': 703, 'tamil': 704 }
     var languageCode = languageCodeMap[selectedLanguage];
     map(statesData.features, (feature) => {
+      let url = '';
       if (includes(['hindi', 'gujarathi', 'urdu'], selectedLanguage)) {
-        var url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
+        url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
                   `${feature.id}&LAN39=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       } else {
-        var url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
+        url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
                   `${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       }
       urls.push(url)
