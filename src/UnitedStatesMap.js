@@ -3,16 +3,6 @@ import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { statesData } from './us-states.js';
 import { map, findIndex, capitalize } from 'lodash';
 
-const popupForFeature = (feature) => {
-  var population = feature.properties.population;
-  var state = feature.properties.name;
-  var language = feature.properties.language;
-  var popup = '<b>' + state + '</b><br/>' +
-              capitalize(language) + ': ' +
-              (population == null ? 'N/A' : population);
-  return popup
-}
-
 class BaseMap extends Component {
   constructor(props){
     super(props)
@@ -24,13 +14,15 @@ class BaseMap extends Component {
     };
   }
 
-  componentWillMount() {
+  fetchCensusData() {
     let urls = [];
     // languages that don't initially work: kannada, hindi, gujurati
+    // IDEA: english vs. non english speakers by state
     var languageCodeMap = { 'bengali': 664, 'gujurati': 667, 'telugu': 701, 'tamil': 704 }
     var languageCode = languageCodeMap[this.props.selectedLanguage];
     map(statesData.features, (feature) => {
-      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
+      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:` +
+                `${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       urls.push(url)
       return feature
     })
@@ -49,36 +41,19 @@ class BaseMap extends Component {
     });
   }
 
+  componentWillMount() {
+    this.fetchCensusData();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps !== this.props) {
-      let urls = [];
-      // languages that don't initially work: kannada, hindi, gujurati
-      var languageCodeMap = { 'bengali': 664, 'telugu': 701, 'tamil': 704 }
-      var languageCode = languageCodeMap[nextProps.selectedLanguage];
-      map(statesData.features, (feature) => {
-        var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
-        urls.push(url)
-        return feature
-      })
-
-      let languageData = [];
-      var promises = urls.map(url => fetch(url).then(r => r.json()));
-      Promise.all(promises).then(results => {
-        languageData = map(results, (result) => result[1]);
-        var finalData = map(statesData.features, (feature) => {
-          var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
-          feature.properties.population = languageData[index][0];
-          feature.properties.language   = nextProps.selectedLanguage;
-          return feature
-        })
-        this.setState({ languageData: { type: 'FeatureCollection', features: finalData } })
-      });
+      this.fetchCensusData();
     }
   }
 
   style(feature) {
     var getColor = (d) => {
-      return d > 39000 ? '#800026' :
+      return d > 35000 ? '#800026' :
              d > 20000 ? '#BD0026' :
              d > 10000 ? '#E31A1C' :
              d > 5000  ? '#FC4E2A' :
@@ -99,6 +74,15 @@ class BaseMap extends Component {
   }
 
   onEachFeature(feature, layer) {
+    var popupForFeature = (feature) => {
+      var population = feature.properties.population;
+      var state = feature.properties.name;
+      var language = feature.properties.language;
+      var popup = '<b>' + state + '</b><br/>' +
+                  capitalize(language) + ': ' +
+                  (population == null ? 'N/A' : population);
+      return popup
+    }
     if (feature.properties && feature.properties.name) {
       layer.bindPopup('');
       layer.on('mouseover', function (e) {
