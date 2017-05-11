@@ -34,9 +34,9 @@ class App extends Component {
             <i style={{backgroundColor: '#E31A1C'}}></i> 10000-20000<br/>
             <i style={{backgroundColor: '#BD0026'}}></i> 20000-35000<br/>
             <i style={{backgroundColor: '#800026'}}></i> 35000+<br/><br/>
-            N/A - Unavailable, likely due to small size (anonymized), or zero<br/><br/>
+            N/A - Unavailable, likely due to small size (anonymized), or zero speakers<br/><br/>
             <b>Choose Language</b><br/>
-            <DropdownButton bsStyle='primary' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
+            <DropdownButton bsStyle='primary' id='dropdown' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
               <MenuItem eventKey='hindi'>Hindi</MenuItem>
               <MenuItem eventKey='bengali'>Bengali</MenuItem>
               <MenuItem eventKey='panjabi'>Punjabi</MenuItem>

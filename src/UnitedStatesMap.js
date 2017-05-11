@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { statesData } from './us-states.js';
-import { map, findIndex, capitalize } from 'lodash';
+import { map, findIndex, capitalize, includes } from 'lodash';
 
 class BaseMap extends Component {
   constructor(props){
@@ -16,16 +16,20 @@ class BaseMap extends Component {
 
   fetchCensusData(selectedLanguage) {
     let urls = [];
-    // languages that don't initially work, need LAN39 data, guju, hindi, urdu 
     var languageCodeMap = { 
-      'hindi': 663, 'bengali': 664, 'panjabi': 665, 'marathi': 666,
-      'gujarathi': 667, 'bihari': 668, 'rajasthani': 669, 'oriya': 670,
-      'urdu': 671, 'assamese': 672, 'kashmiri': 673, 'sindhi': 675,
+      'hindi': 17, 'bengali': 664, 'panjabi': 665, 'marathi': 666,
+      'gujarathi': 18, 'bihari': 668, 'rajasthani': 669, 'oriya': 670,
+      'urdu': 19, 'assamese': 672, 'kashmiri': 673, 'sindhi': 675,
       'telugu': 701, 'kannada': 702, 'malayalam': 703, 'tamil': 704 }
     var languageCode = languageCodeMap[selectedLanguage];
     map(statesData.features, (feature) => {
-      var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:` +
-                `${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
+      if (includes(['hindi', 'gujarathi', 'urdu'], selectedLanguage)) {
+        var url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
+                  `${feature.id}&LAN39=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
+      } else {
+        var url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
+                  `${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
+      }
       urls.push(url)
       return feature
     })
@@ -33,7 +37,7 @@ class BaseMap extends Component {
     var promises = urls.map(url => fetch(url).then(r => {
       if (r.status === 204) {
         var stateId = url.substring(url.indexOf('state:') + 6).substring(0, 2)
-        return [[], [null, null, null, null, stateId]]
+        return [[], [null, null, null, null, null, stateId]]
       } else {
         return r.json()
       }
@@ -41,7 +45,7 @@ class BaseMap extends Component {
     Promise.all(promises).then(results => {
       languageData = map(results, (result) => result[1]);
       var finalData = map(statesData.features, (feature) => {
-        var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
+        var index = findIndex(languageData, (s) => { return s[5] === feature.id; });
         feature.properties.population = languageData[index][0];
         feature.properties.language   = selectedLanguage;
         return feature
