@@ -5,48 +5,44 @@ body {
     background-color: lightgray;
 }
 
+.mapbox {
+    width: 100%;
+}
+
 .map {
-    height: 80vh;
-    margin: 50px;
+    width: 70%;
+    float: left;
+    position: relative;
+    height: 60vh;
+    margin-left: 40px;
     border-width: 5px;
     border: black;
     border-color: black;
     border-style: solid;
 }
 
-.mapbox {
-    width: 90%;
-    text-align: center;
-}
-
 .info {
-    padding: 6px 8px;
+    width: 20%;
+    float: right;
+    padding: 8px;
+    margin-right: 40px;
     font: 14px/16px Arial, Helvetica, sans-serif;
     background: white;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 10px;
-    width: 920px;
-    display: inline-block;
 }
 
 .legend {
     line-height: 18px;
     color: #555;
-    margin: 10px;
     text-align: left;
 }
 
-.legend div {
-    display: inline-block;
-    margin-inline-end: 5px;
-}
-
 .legend i {
+    display: inline-block;
     width: 18px;
     height: 18px;
-    float: left;
-    align-content: left;
-    margin-right: 8px;
+    padding-top: 0px;
     opacity: 0.7;
 }

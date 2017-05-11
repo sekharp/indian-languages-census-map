@@ -14,41 +14,48 @@ class BaseMap extends Component {
     };
   }
 
-  fetchCensusData() {
+  fetchCensusData(selectedLanguage) {
     let urls = [];
-    // languages that don't initially work: kannada, hindi, gujurati
-    // IDEA: english vs. non english speakers by state
-    var languageCodeMap = { 'bengali': 664, 'gujurati': 667, 'telugu': 701, 'tamil': 704 }
-    var languageCode = languageCodeMap[this.props.selectedLanguage];
+    // languages that don't initially work, need LAN39 data, guju, hindi, urdu 
+    var languageCodeMap = { 
+      'hindi': 663, 'bengali': 664, 'panjabi': 665, 'marathi': 666,
+      'gujarathi': 667, 'bihari': 668, 'rajasthani': 669, 'oriya': 670,
+      'urdu': 671, 'assamese': 672, 'kashmiri': 673, 'sindhi': 675,
+      'telugu': 701, 'kannada': 702, 'malayalam': 703, 'tamil': 704 }
+    var languageCode = languageCodeMap[selectedLanguage];
     map(statesData.features, (feature) => {
       var url = `https://api.census.gov/data/2013/language?get=EST,LANLABEL,NAME&for=state:` +
                 `${feature.id}&LAN=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       urls.push(url)
       return feature
     })
-
     let languageData = [];
-    var promises = urls.map(url => fetch(url).then(r => r.json()));
+    var promises = urls.map(url => fetch(url).then(r => {
+      if (r.status === 204) {
+        var stateId = url.substring(url.indexOf('state:') + 6).substring(0, 2)
+        return [[], [null, null, null, null, stateId]]
+      } else {
+        return r.json()
+      }
+    }));
     Promise.all(promises).then(results => {
       languageData = map(results, (result) => result[1]);
       var finalData = map(statesData.features, (feature) => {
         var index = findIndex(languageData, (s) => { return s[4] === feature.id; });
         feature.properties.population = languageData[index][0];
-        feature.properties.language   = this.props.selectedLanguage;
+        feature.properties.language   = selectedLanguage;
         return feature
       })
       this.setState({ languageData: { type: 'FeatureCollection', features: finalData } })
-    });
+    })
   }
 
   componentWillMount() {
-    this.fetchCensusData();
+    this.fetchCensusData(this.props.selectedLanguage);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps !== this.props) {
-      this.fetchCensusData();
-    }
+    this.fetchCensusData(nextProps.selectedLanguage);
   }
 
   style(feature) {
@@ -110,13 +117,13 @@ class BaseMap extends Component {
 
   render() {
     return (
-      <div className="map-container">
+      <div className='map-container'>
         <Map
-          className="map"
+          className='map'
           center={(this.state.latlng || [39.750809, -104.996810])}
           zoom={4}
           length={4}
-          ref="map"
+          ref='map'
           maxBounds={[[85, 100],[-85, -280]]}
         >
           <TileLayer
