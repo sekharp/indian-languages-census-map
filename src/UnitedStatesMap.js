@@ -96,7 +96,7 @@ class BaseMap extends Component {
       return popup
     }
     if (feature.properties && feature.properties.name) {
-      layer.bindPopup('');
+      layer.bindPopup(popupForFeature(feature));
       layer.on('mouseover', function (e) {
         this.setPopupContent(popupForFeature(feature))
         this.openPopup();
