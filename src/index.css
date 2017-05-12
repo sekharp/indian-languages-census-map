@@ -9,10 +9,10 @@ body {
     width: 90%;
     height: 60vh;
     margin-left: 5%;
-    border-width: 5px;
     border: black;
     border-color: black;
     border-style: solid;
+    border-width: 3px;
 }
 
 .info {
@@ -43,4 +43,8 @@ body {
     height: 18px;
     padding-top: 0px;
     opacity: 0.7;
+    border: black;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
 }

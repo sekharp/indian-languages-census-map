@@ -20,7 +20,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Indian Languages US Census Map</h1>
-        <b style={{fontSize: 16}}>Choose Language</b><br/>
+        <b style={{fontSize: 16}}>Choose Language: </b>
         <DropdownButton bsStyle='primary' id='dropdown' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
           <MenuItem eventKey='hindi'>Hindi</MenuItem>
           <MenuItem eventKey='bengali'>Bengali</MenuItem>
