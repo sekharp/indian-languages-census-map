@@ -3,12 +3,10 @@ import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { statesData } from './us-states.js';
 import { map, findIndex, capitalize, includes } from 'lodash';
 
-class BaseMap extends Component {
+class UnitedStatesMap extends Component {
   constructor(props){
     super(props)
     this.state = {
-      lat: 39.742043,
-      lng: -104.991531,
       zoom: 1,
       languageData: {}
     };
@@ -125,7 +123,7 @@ class BaseMap extends Component {
       <div className='map-container'>
         <Map
           className='map'
-          center={(this.state.latlng || [39.750809, -104.996810])}
+          center={[38, -98]}
           zoom={4}
           length={4}
           ref='map'
@@ -149,4 +147,4 @@ class BaseMap extends Component {
   }
 }
 
-export default BaseMap;
+export default UnitedStatesMap;
