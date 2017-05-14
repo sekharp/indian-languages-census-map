@@ -33,6 +33,7 @@ class App extends Component {
           <MenuItem eventKey='urdu'>Urdu</MenuItem>
           <MenuItem eventKey='assamese'>Assamese</MenuItem>
           <MenuItem eventKey='kashmiri'>Kashmiri</MenuItem>
+          <MenuItem eventKey='nepali'>Nepali</MenuItem>
           <MenuItem eventKey='sindhi'>Sindhi</MenuItem>
           <MenuItem eventKey='telugu'>Telugu</MenuItem>
           <MenuItem eventKey='kannada'>Kannada</MenuItem>
