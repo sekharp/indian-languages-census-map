@@ -3,25 +3,36 @@ import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 import { statesData } from './us-states.js';
 import { map, findIndex, capitalize, includes } from 'lodash';
 
-class BaseMap extends Component {
+const languageCodeMap = {
+  'hindi': 17, 'bengali': 664, 'panjabi': 665, 'marathi': 666,
+  'gujarathi': 18, 'bihari': 668, 'rajasthani': 669, 'oriya': 670,
+  'urdu': 19, 'assamese': 672, 'kashmiri': 673, 'nepali': 674,
+  'sindhi': 675, 'telugu': 701, 'kannada': 702, 'malayalam': 703,
+  'tamil': 704,
+}
+
+const popupForFeature = (feature) => {
+  var population = feature.properties.population;
+  var state = feature.properties.name;
+  var language = feature.properties.language;
+  var popup = '<b>' + state + '</b><br/>' +
+              capitalize(language) + ': ' +
+              (population == null ? 'N/A' : population);
+  return popup
+}
+
+class UnitedStatesMap extends Component {
   constructor(props){
     super(props)
     this.state = {
-      lat: 39.742043,
-      lng: -104.991531,
       zoom: 1,
-      languageData: {}
+      languageData: statesData,
     };
   }
 
-  fetchCensusData(selectedLanguage) {
-    let urls = [];
-    var languageCodeMap = {
-      'hindi': 17, 'bengali': 664, 'panjabi': 665, 'marathi': 666,
-      'gujarathi': 18, 'bihari': 668, 'rajasthani': 669, 'oriya': 670,
-      'urdu': 19, 'assamese': 672, 'kashmiri': 673, 'sindhi': 675,
-      'telugu': 701, 'kannada': 702, 'malayalam': 703, 'tamil': 704 }
+  buildUrls(selectedLanguage) {
     var languageCode = languageCodeMap[selectedLanguage];
+    let urls = [];
     map(statesData.features, (feature) => {
       let url = '';
       if (includes(['hindi', 'gujarathi', 'urdu'], selectedLanguage)) {
@@ -34,7 +45,10 @@ class BaseMap extends Component {
       urls.push(url)
       return feature
     })
-    let languageData = [];
+    return urls;
+  }
+
+  buildPromises(urls) {
     var promises = urls.map(url => fetch(url).then(r => {
       if (r.status === 204) {
         var stateId = url.substring(url.indexOf('state:') + 6).substring(0, 2)
@@ -43,15 +57,23 @@ class BaseMap extends Component {
         return r.json()
       }
     }));
+    return promises;
+  }
+
+  fetchCensusData(selectedLanguage) {
+    var urls = this.buildUrls(selectedLanguage);
+    var promises = this.buildPromises(urls);
+
+    let languageData = [];
     Promise.all(promises).then(results => {
       languageData = map(results, (result) => result[1]);
-      var finalData = map(statesData.features, (feature) => {
+      var censusData = map(statesData.features, (feature) => {
         var index = findIndex(languageData, (s) => { return s[5] === feature.id; });
         feature.properties.population = languageData[index][0];
         feature.properties.language   = selectedLanguage;
         return feature
       })
-      this.setState({ languageData: { type: 'FeatureCollection', features: finalData } })
+      this.setState({ languageData: { type: 'FeatureCollection', features: censusData } })
     })
   }
 
@@ -86,36 +108,22 @@ class BaseMap extends Component {
   }
 
   onEachFeature(feature, layer) {
-    var popupForFeature = (feature) => {
-      var population = feature.properties.population;
-      var state = feature.properties.name;
-      var language = feature.properties.language;
-      var popup = '<b>' + state + '</b><br/>' +
-                  capitalize(language) + ': ' +
-                  (population == null ? 'N/A' : population);
-      return popup
-    }
     if (feature.properties && feature.properties.name) {
       layer.bindPopup(popupForFeature(feature));
+      function layerStyle(over) {
+        let colorForMouseEvent = over ? 'black' : 'white';
+        let dashArrayForMouseEvent = over ? '' : '3';
+        return { weight: 2, color: colorForMouseEvent, dashArray: dashArrayForMouseEvent, fillOpacity: 0.7 }
+      }
       layer.on('mouseover', function (e) {
         this.setPopupContent(popupForFeature(feature))
         this.openPopup();
-        layer.setStyle({
-          weight: 5,
-          color: '#666',
-          dashArray: '',
-          fillOpacity: 0.7
-        });
+        layer.setStyle(layerStyle(true));
         layer.bringToFront();
       });
       layer.on('mouseout', function (e) {
         this.closePopup();
-        layer.setStyle({
-          weight: 2,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
-        });
+        layer.setStyle(layerStyle(false));
       });
     }
   }
@@ -125,7 +133,7 @@ class BaseMap extends Component {
       <div className='map-container'>
         <Map
           className='map'
-          center={(this.state.latlng || [39.750809, -104.996810])}
+          center={[38, -98]}
           zoom={4}
           length={4}
           ref='map'
@@ -149,4 +157,4 @@ class BaseMap extends Component {
   }
 }
 
-export default BaseMap;
+export default UnitedStatesMap;

@@ -20,8 +20,8 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Indian Languages US Census Map</h1>
-        <b style={{fontSize: 16}}>Choose Language</b><br/>
-        <DropdownButton bsStyle='primary' id='dropdown' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
+        <b style={{fontSize: 16}}>Choose Language: </b>
+        <DropdownButton bsStyle='default' id='dropdown' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
           <MenuItem eventKey='hindi'>Hindi</MenuItem>
           <MenuItem eventKey='bengali'>Bengali</MenuItem>
           <MenuItem eventKey='panjabi'>Punjabi</MenuItem>
@@ -33,6 +33,7 @@ class App extends Component {
           <MenuItem eventKey='urdu'>Urdu</MenuItem>
           <MenuItem eventKey='assamese'>Assamese</MenuItem>
           <MenuItem eventKey='kashmiri'>Kashmiri</MenuItem>
+          <MenuItem eventKey='nepali'>Nepali</MenuItem>
           <MenuItem eventKey='sindhi'>Sindhi</MenuItem>
           <MenuItem eventKey='telugu'>Telugu</MenuItem>
           <MenuItem eventKey='kannada'>Kannada</MenuItem>

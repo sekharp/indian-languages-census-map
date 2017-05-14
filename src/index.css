@@ -2,17 +2,19 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color: lightgray;
+    background: #8e9eab;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .map {
     width: 90%;
     height: 60vh;
     margin-left: 5%;
-    border-width: 5px;
     border: black;
     border-color: black;
     border-style: solid;
+    border-width: 3px;
 }
 
 .info {
@@ -22,7 +24,11 @@ body {
     border-radius: 10px;
     width: 80%;
     margin-left: 10%;
-    background-color: ghostwhite;
+    background-color: white;
+    border: black;
+    border-color: black;
+    border-style: solid;
+    border-width: 3px;
 }
 
 .legend {
@@ -43,4 +49,8 @@ body {
     height: 18px;
     padding-top: 0px;
     opacity: 0.7;
+    border: black;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
 }
