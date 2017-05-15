@@ -50,7 +50,7 @@ class App extends Component {
           <DropdownButton bsStyle='default' id='dropdown' title={capitalize(this.state.selectedLanguage)} onSelect={this.chooseLanguage}>
             <MenuItem eventKey='hindi'>Hindi</MenuItem>
             <MenuItem eventKey='bengali'>Bengali</MenuItem>
-            <MenuItem eventKey='panjabi'>Punjabi</MenuItem>
+            <MenuItem eventKey='punjabi'>Punjabi</MenuItem>
             <MenuItem eventKey='marathi'>Marathi</MenuItem>
             <MenuItem eventKey='gujarati'>Gujarati</MenuItem>
             <MenuItem eventKey='bihari'>Bihari</MenuItem>
