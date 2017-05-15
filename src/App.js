@@ -83,7 +83,7 @@ class App extends Component {
           <div><i style={{backgroundColor: '#800026'}}></i><br/>35000+</div>
           <br/>
           N/A - Unavailable, likely due to small size (anonymized), or zero speakers.&nbsp;
-          <b style={{fontStyle: 'italic' }}>Data From 2009-13, US Census American Community Survey.</b><br/>
+          <b>Data From 2009-13, US Census American Community Survey.</b><br/>
         </div>
       </div>
     );
