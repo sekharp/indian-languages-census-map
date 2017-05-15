@@ -28,7 +28,7 @@ class UnitedStatesMap extends Component {
     let urls = [];
     map(statesData.features, (feature) => {
       let url = '';
-      if (includes(['hindi', 'gujarathi', 'urdu'], selectedLanguage)) {
+      if (includes(['hindi', 'gujarati', 'urdu'], selectedLanguage)) {
         url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=state:` +
                   `${feature.id}&LAN39=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
       } else {

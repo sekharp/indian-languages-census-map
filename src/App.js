@@ -21,7 +21,7 @@ class App extends Component {
   chooseLanguage = (selectedLanguage) => {
     var languageCode = languageCodeMap[selectedLanguage];
     let url = '';
-    if (includes(['hindi', 'gujarathi', 'urdu'], selectedLanguage)) {
+    if (includes(['hindi', 'gujarati', 'urdu'], selectedLanguage)) {
       url = `https://api.census.gov/data/2013/language?get=EST,LAN,LANLABEL,NAME&for=US` +
                 `&LAN39=${languageCode}&key=${process.env.REACT_APP_SECRET}`;
     } else {
@@ -52,7 +52,7 @@ class App extends Component {
             <MenuItem eventKey='bengali'>Bengali</MenuItem>
             <MenuItem eventKey='panjabi'>Punjabi</MenuItem>
             <MenuItem eventKey='marathi'>Marathi</MenuItem>
-            <MenuItem eventKey='gujarathi'>Gujarati</MenuItem>
+            <MenuItem eventKey='gujarati'>Gujarati</MenuItem>
             <MenuItem eventKey='bihari'>Bihari</MenuItem>
             <MenuItem eventKey='rajasthani'>Rajasthani</MenuItem>
             <MenuItem eventKey='oriya'>Oriya</MenuItem>
@@ -82,8 +82,8 @@ class App extends Component {
           <div><i style={{backgroundColor: '#BD0026'}}></i><br/>20000-35000</div>
           <div><i style={{backgroundColor: '#800026'}}></i><br/>35000+</div>
           <br/>
-          N/A - Unavailable, likely due to small size (anonymized), or zero speakers.&nbsp;
-          <b>Data From 2009-13, US Census American Community Survey.</b><br/>
+          N/A - Unavailable, likely due to small size (anonymized), or zero speakers.<br/>
+          <b>Data From 2009-13, US Census American Community Survey. 3,441,773 South Asian Americans Nationwide (2010 Census).</b><br/>
         </div>
       </div>
     );
