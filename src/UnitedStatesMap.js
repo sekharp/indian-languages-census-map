@@ -70,7 +70,7 @@ class UnitedStatesMap extends Component {
     })
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchCensusData(this.props.selectedLanguage);
   }
 
