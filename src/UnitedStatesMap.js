@@ -70,14 +70,6 @@ class UnitedStatesMap extends Component {
     })
   }
 
-  componentDidMount() {
-    this.fetchCensusData(this.props.selectedLanguage);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.fetchCensusData(nextProps.selectedLanguage);
-  }
-
   style(feature) {
     var getColor = (d) => {
       return d > 35000 ? '#800026' :
@@ -118,6 +110,22 @@ class UnitedStatesMap extends Component {
         this.closePopup();
         layer.setStyle(layerStyle(false));
       });
+    }
+  }
+
+  componentDidMount() {
+    this.fetchCensusData(this.props.selectedLanguage);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.fetchCensusData(nextProps.selectedLanguage);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.selectedLanguage != nextProps.selectedLanguage) {
+      return false;
+    } else {
+      return true;
     }
   }
 
