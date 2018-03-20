@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import UnitedStatesMap from "./UnitedStatesMap.js";
 import "./App.css";
-import { DropdownButton, MenuItem } from "react-bootstrap";
+import { DropdownButton, MenuItem, Col } from "react-bootstrap";
 import { capitalize, includes } from "lodash";
 import { languageCodeMap } from "./languageCodeMap";
 
@@ -129,8 +129,29 @@ class App extends Component {
           </b>
           <br />
         </div>
-        <img src="/indianLanguages.png" style={{ opacity: 0.1 }} />
-        <img src="/indianLanguages.png" style={{ opacity: 0.1 }} />
+        <div>
+          <Col xs={12} smHidden mdHidden lgHidden>
+            <img
+              src="/indianLanguages.png"
+              style={{ opacity: 0.1, width: "100%" }}
+              alt="Scripts of Indian Languages"
+            />
+          </Col>
+          <Col xsHidden sm={6} md={6} lg={6}>
+            <img
+              src="/croppedIndianLanguages.png"
+              style={{ opacity: 0.1, width: "100%" }}
+              alt="Scripts of Indian Languages"
+            />
+          </Col>
+          <Col xsHidden sm={6} md={6} lg={6}>
+            <img
+              src="/croppedIndianLanguages.png"
+              style={{ opacity: 0.1, width: "100%" }}
+              alt="Scripts of Indian Languages"
+            />
+          </Col>
+        </div>
       </div>
     );
   }
