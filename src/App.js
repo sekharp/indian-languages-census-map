@@ -53,7 +53,7 @@ class App extends Component {
         <div className="language-selector">
           <b style={{ fontSize: 16 }}>Choose Language:&nbsp; </b>
           <DropdownButton
-            bsStyle="default"
+            bsStyle="danger"
             id="dropdown"
             title={capitalize(this.state.selectedLanguage)}
             onSelect={this.chooseLanguage}
@@ -77,7 +77,7 @@ class App extends Component {
             <MenuItem eventKey="tamil">Tamil</MenuItem>
           </DropdownButton>
           <b style={{ fontSize: 16 }}>
-            &nbsp; --- &nbsp;{this.state.nationwideSpeakers} Speakers Nationwide
+            &nbsp; — &nbsp;{this.state.nationwideSpeakers} Speakers Nationwide
           </b>
         </div>
 
@@ -129,6 +129,8 @@ class App extends Component {
           </b>
           <br />
         </div>
+        <img src="/indianLanguages.png" style={{ opacity: 0.1 }} />
+        <img src="/indianLanguages.png" style={{ opacity: 0.1 }} />
       </div>
     );
   }
